@@ -1,4 +1,14 @@
-#!/bin/bash -eu
+#!/bin/bash -u
+
+# Install Homebrew on macOS if not installed
+if [ "$(uname -s)" = "Darwin" ]; then
+    if ! command -v brew &>/dev/null; then
+        echo "Homebrew not found. Installing Homebrew..." >&2
+        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+        eval "$(/opt/homebrew/bin/brew shellenv)"
+    fi
+fi
+
 
 # Initalize package manager, and define `install_pkg` function
 if command -v brew &>/dev/null; then
@@ -29,13 +39,11 @@ if [ ! -d "$HOME/.dotfiles" ]; then
     git clone --depth 1 https://github.com/doolim98/.dotfiles.git ~/.dotfiles
 fi
 
-
 # stow my dotfiles
 (
     cd "$HOME/.dotfiles"
     stow --adopt --no-folding .
 )
-
 
 # Install .my.bashrc and .my.zshrc
 SNIPPET_INSTALL_MY_BASHRC='source ~/.my.bashrc'
@@ -51,14 +59,6 @@ fi
 if ! grep -Fxq "$SNIPPET_INSTALL_MY_ZSHRC" ~/.zshrc; then
     echo "$SNIPPET_INSTALL_MY_ZSHRC" >> ~/.zshrc
 fi
-
-
-# Install fzf
-if [ ! -d "$HOME/.fzf" ]; then
-    git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
-    ~/.fzf/install
-fi
-
 
 # Install Starship
 if ! command -v starship &>/dev/null; then

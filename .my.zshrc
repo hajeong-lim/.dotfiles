@@ -25,7 +25,9 @@ if command -v starship &>/dev/null; then
 fi
 
 # Load direnv
-eval "$(direnv hook zsh)"
+if command -v direnv &>/dev/null; then
+    eval "$(direnv hook zsh)"
+fi
 
 # Setup Basic Completion (requires `zsh-completions')
 autoload -U compinit && compinit
