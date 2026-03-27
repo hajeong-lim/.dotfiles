@@ -1,9 +1,15 @@
+export DOTFILES="$HOME/.dotfiles"
+
 dotfiles-push() {
-  cd "$HOME/.dotfiles" && git add -A && git commit -m "${1:-.}" && git push
+  cd "$DOTFILES" && git add -A && git commit -m "${1:-.}" && git push
 }
 
 dotfiles-update() {
-  cd "$HOME/.dotfiles" && git pull
+  cd "$DOTFILES" && git pull
+}
+
+dotfiles-install(){
+  cd "$DOTFILES" && ./install.sh
 }
 
 alias claude-unsafe='claude --allow-dangerously-skip-permissions'
