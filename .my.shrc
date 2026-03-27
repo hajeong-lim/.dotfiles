@@ -6,7 +6,7 @@ dotfiles-update() {
   cd "$HOME/.dotfiles" && git pull
 }
 
-alias claude-unsafe=claude --allow-dangerously-skip-permissions
+alias claude-unsafe='claude --allow-dangerously-skip-permissions'
 
 export CLICOLOR=1
 export DROPBOX="$HOME/Dropbox" 	# NOTE: might be linked type
