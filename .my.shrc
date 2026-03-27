@@ -4,8 +4,13 @@ dotfiles-push() {
   cd "$DOTFILES" && git add -A && git commit -m "${1:-.}" && git push
 }
 
-dotfiles-update() {
+dotfiles-pull() {
   cd "$DOTFILES" && git pull
+}
+
+dotfiles-update() {
+    dotfiles-pull
+    dotfiles-install
 }
 
 dotfiles-install(){
