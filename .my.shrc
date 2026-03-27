@@ -1,3 +1,13 @@
+dotfiles-push() {
+  cd "$HOME/.dotfiles" && git add -A && git commit -m "${1:-.}" && git push
+}
+
+dotfiles-update() {
+  cd "$HOME/.dotfiles" && git pull
+}
+
+alias claude-unsafe=claude --allow-dangerously-skip-permissions
+
 export CLICOLOR=1
 export DROPBOX="$HOME/Dropbox" 	# NOTE: might be linked type
 export PATH="$HOME/.local/bin/:$PATH"
@@ -11,10 +21,4 @@ export PATH="$HOME/.fzf/bin/:$PATH"
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 
-dotfiles-push() {
-  cd "$HOME/.dotfiles" && git add -A && git commit -m "${1:-.}" && git push
-}
 
-dotfiles-update() {
-  cd "$HOME/.dotfiles" && git pull
-}
