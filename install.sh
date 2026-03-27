@@ -17,3 +17,5 @@ if ! command -v stow &>/dev/null; then
     echo "Stow not found. Installing stow..."
     ./scripts/install-stow.sh
 fi
+
+stow .
