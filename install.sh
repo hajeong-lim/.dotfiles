@@ -9,6 +9,8 @@ fi
 
 cd "$HOME/.dotfiles"
 
+git pull
+
 
 ./scripts/install-shrc.sh
 
