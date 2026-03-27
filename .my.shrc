@@ -10,3 +10,11 @@ export PATH="$HOME/.fzf/bin/:$PATH"
 # bun
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
+
+dotfiles-push() {
+  cd "$HOME/.dotfiles" && git add -A && git commit -m "${1:-.}" && git push
+}
+
+dotfiles-update() {
+  cd "$HOME/.dotfiles" && git pull
+}
