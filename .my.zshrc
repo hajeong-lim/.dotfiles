@@ -1,6 +1,10 @@
 source ~/.dotfiles/.my.shrc
 
-PS1='%F{blue}%B%~%b%f %F{green}❯%f '
+if [[ -n "$SSH_CONNECTION" ]]; then
+    PS1='%B%F{green}[%m] %f%F{blue}%B%~%b%f%(?.. [%F{red}%?%f])%F{green} ❯%f '
+else
+    PS1='%F{blue}%B%~%b%f%(?.. [%F{red}%?%f])%F{green} ❯%f '
+fi
 
 HISTFILE=~/.history
 HISTSIZE=100000
@@ -15,7 +19,6 @@ bindkey "\e[A" history-beginning-search-backward
 bindkey "\e[B" history-beginning-search-forward
 
 alias v='nvim'
-alias o='xdg-open'
 alias g='git'
 
 # color
