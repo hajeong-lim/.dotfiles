@@ -1,28 +1,39 @@
-source ~/.my.profile
-source <(fzf --zsh)
+source ~/.dotfiles/.my.shrc
 
-# Prompt
-autoload -Uz vcs_info
-zstyle ':vcs_info:*' enable git svn
-zstyle ':vcs_info:*' formats '%F{yellow}[%b%c]%f'
-zstyle ':vcs_info:*' stagedstr '*'
-zstyle ':vcs_info:*' check-for-staged-changes true
-precmd() {
-    vcs_info
-}
-setopt prompt_subst
+PS1='%F{blue}%B%~%b%f %F{green}❯%f '
 
+HISTFILE=~/.history
+HISTSIZE=100000
+SAVEHIST=100000
 
-PROMPT='%F{green}[$USER@$HOST]%f'
-PROMPT=$PROMPT'${vcs_info_msg_0_}'
-PROMPT=$PROMPT'%F{cyan}[%3~]%f%B\$%f%b '
+setopt inc_append_history
+
+autoload -U compinit && compinit
+
+bindkey -e
+bindkey "\e[A" history-beginning-search-backward
+bindkey "\e[B" history-beginning-search-forward
+
+alias v='nvim'
+alias o='xdg-open'
+alias g='git'
+
+# color
+alias ls='ls --color=auto -hv'
+alias grep='grep --color=auto'
+alias diff='diff --color=auto'
+alias ip='ip -c=auto'
+
+alias l='ls'
+alias ll='ls -l'
+alias la='ls -lA'
+
+alias mv='mv -i'
+
+precmd () { print -Pn "\e]2;%-3~\a"; }
+
 
 [ $TERM = "dumb" ] && unsetopt zle && PS1='$ '
-
-
-if command -v starship &>/dev/null; then 
-    eval "$(starship init zsh)"
-fi
 
 # Load direnv
 if command -v direnv &>/dev/null; then
@@ -31,3 +42,9 @@ fi
 
 # Setup Basic Completion (requires `zsh-completions')
 autoload -U compinit && compinit
+
+# Ruby configuration
+export GEM_HOME="$HOME/.gem"
+if command -v rbenv &>/dev/null; then
+    eval "$(rbenv init -)"
+fi

@@ -1,4 +1,4 @@
-source ~/.my.profile
+source ~/.dotfiles/.my.shrc
 
 # eval "$(fzf --bash)"
 # eval "$(direnv hook bash)"
