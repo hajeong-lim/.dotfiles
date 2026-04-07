@@ -13,6 +13,10 @@ dotfiles-update() {
     dotfiles-install
 }
 
+dotfiles-stow() {
+  cd "$DOTFILES" && stow .
+}
+
 dotfiles-install(){
   cd "$DOTFILES" && ./install.sh
 }
