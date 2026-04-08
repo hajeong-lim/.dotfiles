@@ -1,7 +1,7 @@
 export DOTFILES="$HOME/.dotfiles"
 
 dotfiles-push() {
-  cd "$DOTFILES" && git add -A && git commit -m "${1:-.}" && git push
+  cd "$DOTFILES" && git add -A && git commit -m "${1:-.}" || true && git push
 }
 
 dotfiles-pull() {
