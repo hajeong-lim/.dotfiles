@@ -14,7 +14,11 @@ dotfiles-update() {
 }
 
 dotfiles-stow() {
-  cd "$DOTFILES" && stow .
+  (
+    cd "$DOTFILES" || exit
+    ./scripts/install-shrc.sh
+    stow .
+  )
 }
 
 dotfiles-install(){
@@ -27,6 +31,7 @@ export CLICOLOR=1
 export DROPBOX="$HOME/Dropbox" 	# NOTE: might be linked type
 export PATH="$HOME/.local/bin/:$PATH"
 export PATH="$HOME/.fzf/bin/:$PATH"
+# export PATH="$HOME/.config/emacs:$PATH"
 
 
 # bun completions

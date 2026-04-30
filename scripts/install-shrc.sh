@@ -23,5 +23,6 @@ add_source_line() {
   fi
 }
 
+add_source_line "$HOME/.my.shrc" "$DOTFILES_DIR/.my.shrc"
 add_source_line "$HOME/.bashrc" "$DOTFILES_DIR/.my.bashrc"
 add_source_line "$HOME/.zshrc"  "$DOTFILES_DIR/.my.zshrc"
