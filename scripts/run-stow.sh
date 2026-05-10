@@ -10,7 +10,7 @@ BACKUP_RUN_DIR="$BACKUP_DIR/$(date +%Y%m%d-%H%M%S)"
 MOVED=0
 
 STOW_IGNORE=(
-  --ignore='^[^.].*'
+  # --ignore='^[^.].*'
   --ignore='^\.backup($|/)'
   --ignore='^\.git($|/)'
   --ignore='^\.gitignore$'
