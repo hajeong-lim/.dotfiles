@@ -17,7 +17,7 @@ dotfiles-stow() {
   (
     cd "$DOTFILES" || exit
     ./scripts/install-shrc.sh
-    stow .
+    ./scripts/run-stow.sh
   )
 }
 
