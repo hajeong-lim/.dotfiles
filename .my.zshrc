@@ -1,3 +1,5 @@
+[[ $- != *i* ]] && return
+
 source ~/.dotfiles/.my.shrc
 
 if [[ -n "$SSH_CONNECTION" ]]; then
