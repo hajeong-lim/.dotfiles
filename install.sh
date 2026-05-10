@@ -20,4 +20,4 @@ if ! command -v stow &>/dev/null; then
     ./scripts/install-stow.sh
 fi
 
-stow .
+./scripts/run-stow.sh
