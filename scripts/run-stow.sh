@@ -7,68 +7,53 @@ DOTFILES_DIR="${DOTFILES_DIR:-$(cd "$SCRIPT_DIR/.." && pwd)}"
 TARGET_DIR="${TARGET_DIR:-$HOME}"
 BACKUP_DIR="${BACKUP_DIR:-$DOTFILES_DIR/.backup}"
 BACKUP_RUN_DIR="$BACKUP_DIR/$(date +%Y%m%d-%H%M%S)"
+MOVED=0
 
-PACKAGES=("$@")
-if [ "${#PACKAGES[@]}" -eq 0 ]; then
-  PACKAGES=(.)
-fi
-
-STOW_ARGS=(-d "$DOTFILES_DIR" -t "$TARGET_DIR" --ignore='^/\.backup($|/)' "${PACKAGES[@]}")
+STOW_IGNORE=(
+  --ignore='^[^.].*'
+  --ignore='^\.backup($|/)'
+  --ignore='^\.git($|/)'
+  --ignore='^\.gitignore$'
+  --ignore='^\.gitmodules$'
+  --ignore='^\.stow-local-ignore$'
+  --ignore='^\.DS_Store$'
+  --ignore='^\.vscode($|/)'
+)
 
 if ! command -v stow >/dev/null 2>&1; then
   echo "stow not found. Install stow before running this script." >&2
   exit 1
 fi
 
-stow_output=""
-stow_status=0
-stow_output="$(stow --simulate "${STOW_ARGS[@]}" 2>&1)" || stow_status=$?
-
-if [ "$stow_status" -ne 0 ]; then
-  conflicts=()
-  while IFS= read -r target; do
-    if [ -n "$target" ]; then
-      conflicts+=("$target")
-    fi
-  done < <(
-    printf '%s\n' "$stow_output" | sed -nE \
-      -e 's/^  \* existing target is not owned by stow: (.*)$/\1/p' \
-      -e 's/^  \* existing target is stowed to a different package: (.*) => .*$/\1/p' \
-      -e 's/^  \* cannot stow non-directory .* over existing directory target (.*)$/\1/p' \
-      -e 's/^  \* cannot stow directory .* over existing non-directory target (.*)$/\1/p' \
-      -e 's/^  \* cannot stow .* over existing target (.*) since .*$/\1/p'
-  )
-
-  if [ "${#conflicts[@]}" -eq 0 ]; then
-    printf '%s\n' "$stow_output" >&2
-    exit "$stow_status"
-  fi
-
-  if [ -e "$BACKUP_RUN_DIR" ]; then
-    BACKUP_RUN_DIR="$BACKUP_RUN_DIR-$$"
-  fi
-
-  for target in "${conflicts[@]}"; do
-    case "$target" in
-      /*)
-        target_path="$target"
-        backup_path="$BACKUP_RUN_DIR/${target#/}"
-        ;;
-      *)
-        target_path="$TARGET_DIR/$target"
-        backup_path="$BACKUP_RUN_DIR/$target"
-        ;;
-    esac
-
-    if [ ! -e "$target_path" ] && [ ! -L "$target_path" ]; then
-      echo "Skipping missing conflict target: $target_path" >&2
-      continue
-    fi
-
-    mkdir -p "$(dirname "$backup_path")"
-    echo "Backing up $target_path -> $backup_path"
-    mv "$target_path" "$backup_path"
-  done
+if [ ! -d "$TARGET_DIR" ]; then
+  echo "Target directory does not exist: $TARGET_DIR" >&2
+  exit 1
 fi
 
-stow "${STOW_ARGS[@]}"
+for source in "$DOTFILES_DIR"/.[!.]* "$DOTFILES_DIR"/..?*; do
+  [ -e "$source" ] || [ -L "$source" ] || continue
+
+  name="$(basename "$source")"
+  case "$name" in
+    .backup|.git|.gitignore|.gitmodules|.stow-local-ignore|.DS_Store|.vscode)
+      continue
+      ;;
+  esac
+
+  target="$TARGET_DIR/$name"
+  [ -e "$target" ] || [ -L "$target" ] || continue
+  [ "$target" -ef "$source" ] && continue
+
+  mkdir -p "$BACKUP_RUN_DIR"
+  echo "Backing up $target -> $BACKUP_RUN_DIR/$name"
+  mv "$target" "$BACKUP_RUN_DIR/$name"
+  MOVED=1
+done
+
+stow -R -d "$DOTFILES_DIR" -t "$TARGET_DIR" "${STOW_IGNORE[@]}" .
+
+echo "Dotfiles stowed into $TARGET_DIR"
+
+if [ "$MOVED" -eq 1 ]; then
+  echo "Backups saved in $BACKUP_RUN_DIR"
+fi

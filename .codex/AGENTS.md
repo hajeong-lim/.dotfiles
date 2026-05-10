@@ -3,7 +3,6 @@
 - When referencing files, use the full relative path from the root of the project (i.e., your current directory). 
     - Use `:` to separate the file path and the line number (e.g., `src/app.js:15`).
 
-
 # Karpathy skill
 
 Behavioral guidelines to reduce common LLM coding mistakes. Merge with project-specific instructions as needed.
