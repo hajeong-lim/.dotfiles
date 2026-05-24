@@ -27,9 +27,9 @@ Enable key repeat
 
 ```bash
 # "Set a blazingly fast keyboard repeat rate, "
-defaults write NSGlobalDomain KeyRepeat -int 1
+defaults write NSGlobalDomain KeyRepeat -int 10
 # "Set a shorter Delay until key repeat"
-defaults write NSGlobalDomain InitialKeyRepeat -int  9
+defaults write NSGlobalDomain InitialKeyRepeat -int  20
 # Disable long-press accents
 defaults write -g ApplePressAndHoldEnabled -bool false
   ```
