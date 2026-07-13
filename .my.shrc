@@ -7,7 +7,6 @@ dotfiles-push() {
 dotfiles-pull() {
   cd "$DOTFILES" && git pull
 }
-
 dotfiles-update() {
     dotfiles-pull
     dotfiles-install
@@ -35,10 +34,13 @@ export PATH="$HOME/.fzf/bin/:$PATH"
 
 
 # bun completions
-[ -s "/Users/lim/.bun/_bun" ] && source "/Users/lim/.bun/_bun"
+[ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
 
 # bun
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 
 
+mkdir -p ~/.tmux-sockets
+chmod 700 ~/.tmux-sockets
+export TMUX_TMPDIR=$HOME/.tmux-sockets
